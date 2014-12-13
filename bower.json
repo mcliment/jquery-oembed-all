@@ -1,0 +1,14 @@
+{
+  "name": "jquery-oembed-all",
+  "version": "0.9",
+  "main": [
+    "jquery.oembed.js"
+    "jquery.oembed.css"
+  ],
+  "ignore": [
+    ".jshintrc",
+  ],
+  "dependencies": {
+    "jQuery": "2.1.1"
+  }
+}
