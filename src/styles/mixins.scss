@@ -1,0 +1,11 @@
+@mixin transition {
+  -webkit-transition-delay: 0s;
+  -webkit-transition-duration: .4s;
+  -webkit-transition-property: width;
+  -webkit-transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+}
+
+@mixin box-shadow($shadow) {
+	-webkit-box-shadow: $shadow;
+  box-shadow: $shadow;
+}

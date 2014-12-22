@@ -25,24 +25,49 @@ module.exports = function(grunt) {
 		qunit: {
       		files: ['test/**/*.html']
     	},
+    	uglify: {
+			release: {
+				src: 'src/scripts/jquery.oembed.js',
+				dest: 'dist/jquery.oembed.min.js'
+			}
+    	},
 		sass: {
-			options: {
-				outputStyle: 'nested',
-				sourceMap: true
+			debug: {
+				options: {
+					style: 'nested',
+					sourcemap: 'auto'
+				},
+				files: {
+					'dist/jquery.oembed.css': 'src/styles/jquery.oembed.scss'
+				}
 			},
-			files: [{
-				expand: true,
-				cwd: 'src/styles',
-				src: ['*.scss'],
-				dest: 'dist/styles',
-				ext: '.css'
-			}]
+			release: {
+				options: {
+					style: 'compressed',
+					sourcemap: 'none'
+				},
+				files: {
+					'dist/jquery.oembed.min.css': 'src/styles/jquery.oembed.scss'
+				}
+			}	
 		},
+		scsslint: {
+			all: [
+				'src/styles/*.scss'
+			],
+			options: {
+				config: 'src/styles/.scss-lint.yml',
+				colorizeOutput: true,
+				exclude: ['src/styles/mixins.scss']
+			}
+		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
-	grunt.loadNpmTasks('grunt-sass');
+	grunt.loadNpmTasks('grunt-contrib-sass');
+	grunt.loadNpmTasks('grunt-scss-lint');
 
-	grunt.registerTask('default', ['jshint', 'sass']);
+	grunt.registerTask('default', ['jshint', 'scsslint', 'sass']);
 };
