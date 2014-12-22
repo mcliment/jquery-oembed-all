@@ -11,7 +11,6 @@
     "use strict";
     $.fn.oembed = function (url, options, embedAction) {
 
-        settings = $.extend(true, $.fn.oembed.defaults, options);
         var shortURLList = ["0rz.tw", "1link.in", "1url.com", "2.gp", "2big.at", "2tu.us", "3.ly", "307.to", "4ms.me", "4sq.com", "4url.cc", "6url.com", "7.ly", "a.gg", "a.nf", "aa.cx", "abcurl.net",
             "ad.vu", "adf.ly", "adjix.com", "afx.cc", "all.fuseurl.com", "alturl.com", "amzn.to", "ar.gy", "arst.ch", "atu.ca", "azc.cc", "b23.ru", "b2l.me", "bacn.me", "bcool.bz", "binged.it",
             "bit.ly", "bizj.us", "bloat.me", "bravo.ly", "bsa.ly", "budurl.com", "canurl.com", "chilp.it", "chzb.gr", "cl.lk", "cl.ly", "clck.ru", "cli.gs", "cliccami.info",
@@ -37,6 +36,8 @@
             "wp.me", "x.vu", "xr.com", "xrl.in", "xrl.us", "xurl.es", "xurl.jp", "y.ahoo.it", "yatuc.com", "ye.pe", "yep.it", "yfrog.com", "yhoo.it", "yiyd.com", "youtu.be", "yuarel.com",
             "z0p.de", "zi.ma", "zi.mu", "zipmyurl.com", "zud.me", "zurl.ws", "zz.gd", "zzang.kr", "›.ws", "✩.ws", "✿.ws", "❥.ws", "➔.ws", "➞.ws", "➡.ws", "➨.ws", "➯.ws", "➹.ws", "➽.ws"];
 
+        settings = $.extend(true, $.fn.oembed.defaults, options);
+
         if ($("#jqoembeddata").length === 0) {
             $("<span id=\"jqoembeddata\"></span>").appendTo("body");
         }
@@ -60,51 +61,20 @@
                 for (var j = 0, l = shortURLList.length; j < l; j++) {
                     var regExp = new RegExp("://" + shortURLList[j] + "/", "i");
 
-                    if (resourceURL.match(regExp) !== null) {
-                        //AJAX to http://api.longurl.org/v2/expand?url=http://bit.ly/JATvIs&format=json&callback=hhh
-                        var ajaxopts = $.extend({
-                            url: "http://api.longurl.org/v2/expand",
-                            dataType: "jsonp",
-                            data: {
-                                url: resourceURL,
-                                format: "json"
-                                //callback: "?"
-                            },
-                            success: function (data) {
-                                //this = $.fn.oembed;
-                                resourceURL = data["long-url"];
-                                provider = $.fn.oembed.getOEmbedProvider(data["long-url"]);
-
-                                //remove fallback
-                                if (settings.fallback === false) {
-                                    provider = provider.name.toLowerCase() === "opengraph" ? null : provider;
-                                }
-
-                                if (provider !== null) {
-                                    provider.params = getNormalizedParams(settings[provider.name]) || {};
-                                    provider.maxWidth = settings.maxWidth;
-                                    provider.maxHeight = settings.maxHeight;
-                                    embedCode(container, resourceURL, provider);
-                                } else {
-                                    settings.onProviderNotFound.call(container, resourceURL);
-                                }
-                            },
-                            error: function () {
-                                settings.onError.call(container, resourceURL);
-                            }
-                        }, settings.ajaxOptions || {});
-
-                        $.ajax(ajaxopts);
+                    if (regExp.test(resourceURL)) {
+                        provider = expandUrl(container, resourceURL);
 
                         return container;
                     }
                 }
+
                 provider = $.fn.oembed.getOEmbedProvider(resourceURL);
 
                 //remove fallback
                 if (settings.fallback === false) {
                     provider = provider.name.toLowerCase() === "opengraph" ? null : provider;
                 }
+
                 if (provider !== null) {
                     provider.params = getNormalizedParams(settings[provider.name]) || {};
                     provider.maxWidth = settings.maxWidth;
@@ -134,10 +104,8 @@
         },
         afterEmbed: function () {
         },
-        onEmbed: false,
-        onError: function (a, b, c, d) {
-            console.log("err:", a, b, c, d);
-        },
+        onEmbed: null,
+        onError: null,
         ajaxOptions: {}
     };
 
@@ -192,7 +160,48 @@
         settings.afterEmbed.call(container, oembedData);
     }
 
+    function expandUrl(container, resourceURL) {
+        var provider;
+
+        //AJAX to http://api.longurl.org/v2/expand?url=http://bit.ly/JATvIs&format=json&callback=hhh
+        var ajaxopts = $.extend({
+            url: "http://api.longurl.org/v2/expand",
+            dataType: "jsonp",
+            data: {
+                url: resourceURL,
+                format: "json"
+                //callback: "?"
+            },
+            success: function (data) {
+                //this = $.fn.oembed;
+                resourceURL = data["long-url"];
+                provider = $.fn.oembed.getOEmbedProvider(data["long-url"]);
+
+                //remove fallback
+                if (settings.fallback === false) {
+                    provider = provider.name.toLowerCase() === "opengraph" ? null : provider;
+                }
+
+                if (provider !== null) {
+                    provider.params = getNormalizedParams(settings[provider.name]) || {};
+                    provider.maxWidth = settings.maxWidth;
+                    provider.maxHeight = settings.maxHeight;
+                    embedCode(container, resourceURL, provider);
+                } else {
+                    settings.onProviderNotFound.call(container, resourceURL);
+                }
+            },
+            error: function () {
+                settings.onError.call(container, resourceURL);
+            }
+        }, settings.ajaxOptions || {});
+
+        $.ajax(ajaxopts);
+    }
+
     function embedCode(container, externalUrl, embedProvider) {
+        var ajaxopts;
+
         if ($("#jqoembeddata").data(externalUrl) !== undefined && embedProvider.embedtag.tag !== "iframe") {
             var oembedData = {code: $("#jqoembeddata").data(externalUrl)};
             success(oembedData, externalUrl, container);
@@ -207,7 +216,7 @@
                 query += " and compat=\"html5\"";
             }
 
-            var ajaxopts = $.extend({
+            ajaxopts = $.extend({
                 url: "//query.yahooapis.com/v1/public/yql",
                 dataType: "jsonp",
                 data: {
@@ -308,7 +317,7 @@
                     embedProvider.apiendpoint = embedProvider.apiendpoint.replace("_APIKEY_", settings.apikeys[embedProvider.name]);
                 }
 
-                var ajaxopts = $.extend({
+                ajaxopts = $.extend({
                     url: externalUrl.replace(embedProvider.templateRegex, embedProvider.apiendpoint),
                     dataType: "jsonp",
                     success: function (data) {
@@ -325,7 +334,7 @@
         } else {
 
             var requestUrl = getRequestUrl(embedProvider, externalUrl);
-            var ajaxopts = $.extend({
+            ajaxopts = $.extend({
                 url: requestUrl,
                 dataType: embedProvider.dataType || "jsonp",
                 success: function (data) {
