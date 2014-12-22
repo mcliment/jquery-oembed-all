@@ -15,7 +15,7 @@
             "ad.vu", "adf.ly", "adjix.com", "afx.cc", "all.fuseurl.com", "alturl.com", "amzn.to", "ar.gy", "arst.ch", "atu.ca", "azc.cc", "b23.ru", "b2l.me", "bacn.me", "bcool.bz", "binged.it",
             "bit.ly", "bizj.us", "bloat.me", "bravo.ly", "bsa.ly", "budurl.com", "canurl.com", "chilp.it", "chzb.gr", "cl.lk", "cl.ly", "clck.ru", "cli.gs", "cliccami.info",
             "clickthru.ca", "clop.in", "conta.cc", "cort.as", "cot.ag", "crks.me", "ctvr.us", "cutt.us", "dai.ly", "decenturl.com", "dfl8.me", "digbig.com",
-            "http:\/\/digg\.com\/[^\/]+$", "disq.us", "dld.bz", "dlvr.it", "do.my", "doiop.com", "dopen.us", "easyuri.com", "easyurl.net", "eepurl.com", "eweri.com",
+            "http:\\/\\/digg\\.com\\/[^\\/]+$", "disq.us", "dld.bz", "dlvr.it", "do.my", "doiop.com", "dopen.us", "easyuri.com", "easyurl.net", "eepurl.com", "eweri.com",
             "fa.by", "fav.me", "fb.me", "fbshare.me", "ff.im", "fff.to", "fire.to", "firsturl.de", "firsturl.net", "flic.kr", "flq.us", "fly2.ws", "fon.gs", "freak.to",
             "fuseurl.com", "fuzzy.to", "fwd4.me", "fwib.net", "g.ro.lt", "gizmo.do", "gl.am", "go.9nl.com", "go.ign.com", "go.usa.gov", "goo.gl", "goshrink.com", "gurl.es",
             "hex.io", "hiderefer.com", "hmm.ph", "href.in", "hsblinks.com", "htxt.it", "huff.to", "hulu.com", "hurl.me", "hurl.ws", "icanhaz.com", "idek.net", "ilix.in", "is.gd",
@@ -73,7 +73,7 @@
                                 provider = $.fn.oembed.getOEmbedProvider(data['long-url']);
 
                                 //remove fallback
-                                if (!!settings.fallback === false) {
+                                if (settings.fallback === false) {
                                     provider = provider.name.toLowerCase() === 'opengraph' ? null : provider;
                                 }
 
@@ -87,7 +87,7 @@
                                 }
                             },
                             error: function () {
-                                settings.onError.call(container, resourceURL)
+                                settings.onError.call(container, resourceURL);
                             }
                         }, settings.ajaxOptions || {});
 
@@ -99,7 +99,7 @@
                 provider = $.fn.oembed.getOEmbedProvider(resourceURL);
 
                 //remove fallback
-                if (!!settings.fallback === false) {
+                if (settings.fallback === false) {
                     provider = provider.name.toLowerCase() === 'opengraph' ? null : provider;
                 }
                 if (provider !== null) {
@@ -133,7 +133,7 @@
         },
         onEmbed: false,
         onError: function (a, b, c, d) {
-            console.log('err:', a, b, c, d)
+            console.log('err:', a, b, c, d);
         },
         ajaxOptions: {}
     };
@@ -160,17 +160,19 @@
         }
 
         for (i in provider.params) {
-            // We don't want them to jack everything up by changing the callback parameter
-            if (i == provider.callbackparameter)
-                continue;
+            if (provider.params.hasOwnProperty(i)) {
+                // We don't want them to jack everything up by changing the callback parameter
+                if (i === provider.callbackparameter)
+                    continue;
 
-            // allows the options to be set to null, don't send null values to the server as parameters
-            if (provider.params[i] !== null)
-                qs += "&" + escape(i) + "=" + provider.params[i];
+                // allows the options to be set to null, don't send null values to the server as parameters
+                if (provider.params[i] !== null)
+                    qs += "&" + encodeURIComponent(i) + "=" + provider.params[i];
+            }
         }
 
-        url += "format=" + provider.format + "&url=" + escape(externalUrl) + qs;
-        if (provider.dataType != 'json')
+        url += "format=" + provider.format + "&url=" + encodeURIComponent(externalUrl) + qs;
+        if (provider.dataType !== 'json')
             url += "&" + provider.callbackparameter + "=?";
 
         return url;
@@ -184,16 +186,16 @@
     }
 
     function embedCode(container, externalUrl, embedProvider) {
-        if ($('#jqoembeddata').data(externalUrl) != undefined && embedProvider.embedtag.tag != 'iframe') {
+        if ($('#jqoembeddata').data(externalUrl) !== undefined && embedProvider.embedtag.tag !== 'iframe') {
             var oembedData = {code: $('#jqoembeddata').data(externalUrl)};
             success(oembedData, externalUrl, container);
         } else if (embedProvider.yql) {
             var from = embedProvider.yql.from || 'htmlstring';
             var url = embedProvider.yql.url ? embedProvider.yql.url(externalUrl) : externalUrl;
-            var query = 'SELECT * FROM ' + from
-                + ' WHERE url="' + (url) + '"'
-                + " and " + (/html/.test(from) ? 'xpath' : 'itemPath') + "='" + (embedProvider.yql.xpath || '/') + "'";
-            if (from == 'html')
+            var query = 'SELECT * FROM ' + from +
+                ' WHERE url="' + (url) + '"' +
+                " and " + (/html/.test(from) ? 'xpath' : 'itemPath') + "='" + (embedProvider.yql.xpath || '/') + "'";
+            if (from === 'html')
                 query += " and compat='html5'";
             var ajaxopts = $.extend({
                 url: "//query.yahooapis.com/v1/public/yql",
@@ -205,32 +207,32 @@
                     callback: "?"
                 },
                 success: function (data) {
-                    var result;
+                    var result, i, l;
 
-                    if (embedProvider.yql.xpath && embedProvider.yql.xpath == '//meta|//title|//link') {
+                    if (embedProvider.yql.xpath && embedProvider.yql.xpath === '//meta|//title|//link') {
                         var meta = {};
 
-                        if (data.query == null) {
+                        if (data.query === null) {
                             data.query = {};
                         }
-                        if (data.query.results == null) {
+                        if (data.query.results === null) {
                             data.query.results = {"meta": []};
                         }
-                        for (var i = 0, l = data.query.results.meta.length; i < l; i++) {
+                        for (i = 0, l = data.query.results.meta.length; i < l; i++) {
                             var name = data.query.results.meta[i].name || data.query.results.meta[i].property || null;
-                            if (name == null)continue;
+                            if (name === null) continue;
                             meta[name.toLowerCase()] = data.query.results.meta[i].content;
                         }
                         if (!meta.hasOwnProperty("title") || !meta.hasOwnProperty("og:title")) {
-                            if (data.query.results.title != null) {
+                            if (data.query.results.title !== null) {
                                 meta.title = data.query.results.title;
                             }
                         }
                         if (!meta.hasOwnProperty("og:image") && data.query.results.hasOwnProperty("link")) {
-                            for (var i = 0, l = data.query.results.link.length; i < l; i++) {
+                            for (i = 0, l = data.query.results.link.length; i < l; i++) {
                                 if (data.query.results.link[i].hasOwnProperty("rel")) {
-                                    if (data.query.results.link[i].rel == "apple-touch-icon") {
-                                        if (data.query.results.link[i].href.charAt(0) == "/") {
+                                    if (data.query.results.link[i].rel === "apple-touch-icon") {
+                                        if (data.query.results.link[i].href.charAt(0) === "/") {
                                             meta["og:image"] = url.match(/^(([a-z]+:)?(\/\/)?[^\/]+\/).*$/)[1] + data.query.results.link[i].href;
                                         } else {
                                             meta["og:image"] = data.query.results.link[i].href;
@@ -274,12 +276,12 @@
                     .css('max-height', settings.maxHeight || 'auto')
                     .css('max-width', settings.maxWidth || 'auto');
 
-                if (tag == 'embed') {
+                if (tag === 'embed') {
                     code.attr('type', embedProvider.embedtag.type || "application/x-shockwave-flash")
                         .attr('flashvars', externalUrl.replace(embedProvider.templateRegex, flashvars));
                 }
 
-                if (tag == 'iframe') {
+                if (tag === 'iframe') {
                     code.attr('scrolling', embedProvider.embedtag.scrolling || "no")
                         .attr('frameborder', embedProvider.embedtag.frameborder || "0");
 
@@ -291,7 +293,7 @@
                 if (embedProvider.apikey)
                     embedProvider.apiendpoint = embedProvider.apiendpoint.replace('_APIKEY_', settings.apikeys[embedProvider.name]);
 
-                ajaxopts = $.extend({
+                var ajaxopts = $.extend({
                     url: externalUrl.replace(embedProvider.templateRegex, embedProvider.apiendpoint),
                     dataType: 'jsonp',
                     success: function (data) {
@@ -308,7 +310,7 @@
         } else {
 
             var requestUrl = getRequestUrl(embedProvider, externalUrl);
-            ajaxopts = $.extend({
+            var ajaxopts = $.extend({
                 url: requestUrl,
                 dataType: embedProvider.dataType || 'jsonp',
                 success: function (data) {
@@ -350,7 +352,7 @@
 
         if (embedMethod === 'auto' && container.attr('href') !== null) {
             embedMethod = 'append';
-        } else if (embedMethod == 'auto') {
+        } else if (embedMethod === 'auto') {
             embedMethod = 'replace';
         }
 
@@ -367,7 +369,7 @@
                 if (settings.includeHandle) {
                     $('<span class="oembedall-closehide">&darr;</span>').insertBefore(container).click(function () {
                         var encodedString = encodeURIComponent($(this).text());
-                        $(this).html((encodedString == '%E2%86%91') ? '&darr;' : '&uarr;');
+                        $(this).html((encodedString === '%E2%86%91') ? '&darr;' : '&uarr;');
                         $(this).parent().children().last().toggle();
                     });
                 }
@@ -464,16 +466,16 @@
 
         if (extraSettings.useYQL) {
 
-            if (extraSettings.useYQL == 'xml') {
+            if (extraSettings.useYQL === 'xml') {
                 extraSettings.yql = {
                     xpath: "//oembed/html",
                     from: 'xml',
                     apiendpoint: this.apiendpoint,
                     url: function (externalurl) {
-                        return this.apiendpoint + '?format=xml&url=' + externalurl
+                        return this.apiendpoint + '?format=xml&url=' + externalurl;
                     },
                     datareturn: function (results) {
-                        return results.html.replace(/.*\[CDATA\[(.*)\]\]>$/, '$1') || ''
+                        return results.html.replace(/.*\[CDATA\[(.*)\]\]>$/, '$1') || '';
                     }
                 };
             } else {
@@ -481,13 +483,13 @@
                     from: 'json',
                     apiendpoint: this.apiendpoint,
                     url: function (externalurl) {
-                        return this.apiendpoint + '?format=json&url=' + externalurl
+                        return this.apiendpoint + '?format=json&url=' + externalurl;
                     },
                     datareturn: function (results) {
-                        if (results.json.type != 'video' && (results.json.url || results.json.thumbnail_url)) {
+                        if (results.json.type !== 'video' && (results.json.url || results.json.thumbnail_url)) {
                             return '<img src="' + (results.json.url || results.json.thumbnail_url) + '" />';
                         }
-                        return results.json.html || ''
+                        return results.json.html || '';
                     }
                 };
             }
@@ -496,7 +498,9 @@
 
 
         for (var property in extraSettings) {
-            this[property] = extraSettings[property];
+            if (extraSettings.hasOwnProperty(property)) {
+                this[property] = extraSettings[property];
+            }
         }
 
         this.format = this.format || 'json';
@@ -589,7 +593,7 @@
         new $.fn.oembed.OEmbedProvider("videojug", "video", ["videojug\\.com/(film|payer|interview).*"], "http://www.videojug.com/oembed.json", {useYQL: 'json'}),
         new $.fn.oembed.OEmbedProvider("sapo", "video", ["videos\\.sapo\\.pt/.*"], "http://videos.sapo.pt/oembed", {useYQL: 'json'}),
         new $.fn.oembed.OEmbedProvider("vodpod", "video", ["vodpod.com/watch/.*"], "http://vodpod.com/oembed.js", {useYQL: 'json'}),
-        new $.fn.oembed.OEmbedProvider("vimeo", "video", ["www\.vimeo\.com\/groups\/.*\/videos\/.*", "www\.vimeo\.com\/.*", "vimeo\.com\/groups\/.*\/videos\/.*", "vimeo\.com\/.*"], "//vimeo.com/api/oembed.json"),
+        new $.fn.oembed.OEmbedProvider("vimeo", "video", ["www\\.vimeo\\.com\\/groups\\/.*\\/videos\\/.*", "www\\.vimeo\\.com\\/.*", "vimeo\\.com\\/groups\\/.*\\/videos\\/.*", "vimeo\\.com\\/.*"], "//vimeo.com/api/oembed.json"),
         new $.fn.oembed.OEmbedProvider("dailymotion", "video", ["dailymotion\\.com/.+"], '//www.dailymotion.com/services/oembed'),
         new $.fn.oembed.OEmbedProvider("5min", "video", ["www\\.5min\\.com/.+"], 'http://api.5min.com/oembed.xml', {useYQL: 'xml'}),
         new $.fn.oembed.OEmbedProvider("National Film Board of Canada", "video", ["nfb\\.ca/film/.+"], 'http://www.nfb.ca/remote/services/oembed/', {useYQL: 'json'}),
@@ -609,7 +613,7 @@
                 nocache: 1
             }),
         new $.fn.oembed.OEmbedProvider("boxofficebuz", "video", ["boxofficebuz\\.com\\/embed/.+"], "http://boxofficebuz.com/embed/$1/$2", {templateRegex: [/.*boxofficebuz\.com\/embed\/(\w+)\/([\w*\-*]+)/], embedtag: {tag: 'iframe', width: 480, height: 360 }}),
-        new $.fn.oembed.OEmbedProvider("clipsyndicate", "video", ["clipsyndicate\\.com/video/play/.+", "clipsyndicate\\.com/embed/iframe\?.+"], "http://eplayer.clipsyndicate.com/embed/iframe?pf_id=1&show_title=0&va_id=$1&windows=1", {templateRegex: [/.*www\.clipsyndicate\.com\/video\/play\/(\w+)\/.*/, /.*eplayer\.clipsyndicate\.com\/embed\/iframe\?.*va_id=(\w+).*.*/], embedtag: {tag: 'iframe', width: 480, height: 360 }, nocache: 1}),
+        new $.fn.oembed.OEmbedProvider("clipsyndicate", "video", ["clipsyndicate\\.com/video/play/.+", "clipsyndicate\\.com/embed/iframe\\?.+"], "http://eplayer.clipsyndicate.com/embed/iframe?pf_id=1&show_title=0&va_id=$1&windows=1", {templateRegex: [/.*www\.clipsyndicate\.com\/video\/play\/(\w+)\/.*/, /.*eplayer\.clipsyndicate\.com\/embed\/iframe\?.*va_id=(\w+).*.*/], embedtag: {tag: 'iframe', width: 480, height: 360 }, nocache: 1}),
         new $.fn.oembed.OEmbedProvider("coub", "video", ["coub\\.com/.+"], "http://www.coub.com/embed/$1?muted=false&autostart=false&originalSize=false&hideTopBar=false&noSiteButtons=false&startWithHD=false", {templateRegex: [/.*coub\.com\/embed\/(\w+)\?*.*/, /.*coub\.com\/view\/(\w+).*/], embedtag: {tag: 'iframe', width: 480, height: 360 }, nocache: 1}),
         new $.fn.oembed.OEmbedProvider("discoverychannel", "video", ["snagplayer\\.video\\.dp\\.discovery\\.com/.+"], "http://snagplayer.video.dp.discovery.com/$1/snag-it-player.htm?auto=no", {templateRegex: [/.*snagplayer\.video\.dp\.discovery\/(\w+).*/], embedtag: {tag: 'iframe', width: 480, height: 360 }}),
         new $.fn.oembed.OEmbedProvider("telly", "video", ["telly\\.com/.+"], "http://www.telly.com/embed.php?guid=$1&autoplay=0", {templateRegex: [/.*telly\.com\/embed\.php\?guid=(\w+).*/, /.*telly\.com\/(\w+).*/], embedtag: {tag: 'iframe', width: 480, height: 360 }}),
@@ -647,7 +651,7 @@
                     xpath: "json",
                     from: 'json',
                     url: function (externalurl) {
-                        return 'http://skitch.com/oembed/?format=json&url=' + externalurl
+                        return 'http://skitch.com/oembed/?format=json&url=' + externalurl;
                     },
                     datareturn: function (data) {
                         return $.fn.oembed.getPhotoCode(data.json.url, data.json);
@@ -765,8 +769,8 @@
             templateData: function (data) {
                 if (!data.parse)
                     return false;
-                var text = data.parse['text']['*'].replace(/href="\/wiki/g, 'href="http://en.wikipedia.org/wiki');
-                return  '<div id="content"><h3><a class="nav-link" href="http://en.wikipedia.org/wiki/' + data.parse['displaytitle'] + '">' + data.parse['displaytitle'] + '</a></h3>' + text + '</div>';
+                var text = data.parse.text['*'].replace(/href="\/wiki/g, 'href="http://en.wikipedia.org/wiki');
+                return  '<div id="content"><h3><a class="nav-link" href="http://en.wikipedia.org/wiki/' + data.parse.displaytitle + '">' + data.parse.displaytitle + '</a></h3>' + text + '</div>';
             }
         }),
         new $.fn.oembed.OEmbedProvider("imdb", "rich", ["imdb.com/title/.+"], "http://www.imdbapi.com/?i=$1&callback=?",
@@ -778,8 +782,8 @@
                     return  '<div id="content"><h3><a class="nav-link" href="http://imdb.com/title/' + data.imdbID + '/">' + data.Title + '</a> (' + data.Year + ')</h3><p>Rating: ' + data.imdbRating + '<br/>Genre: ' + data.Genre + '<br/>Starring: ' + data.Actors + '</p></div>  <div id="view-photo-caption">' + data.Plot + '</div></div>';
                 }
             }),
-        new $.fn.oembed.OEmbedProvider("livejournal", "rich", ["livejournal.com/"], "http://ljpic.seacrow.com/json/$2$4?jsonp=?"
-            , {
+        new $.fn.oembed.OEmbedProvider("livejournal", "rich", ["livejournal.com/"], "http://ljpic.seacrow.com/json/$2$4?jsonp=?",
+            {
                 templateRegex: /(http:\/\/(((?!users).)+)\.livejournal\.com|.*users\.livejournal\.com\/([^\/]+)).*/,
                 templateData: function (data) {
                     if (!data.username)
@@ -817,17 +821,17 @@
             {templateRegex: /.*com\/([^\/]+).*/, embedtag: {tag: 'iframe', width: '100%', height: 'auto' }}),
         new $.fn.oembed.OEmbedProvider("pastie", "rich", ["pastie\\.org/pastes/.+"], null, {yql: {xpath: '//pre[@class="textmate-source"]'}}),
         new $.fn.oembed.OEmbedProvider("github", "rich", ["gist.github.com/.+"], "https://github.com/api/oembed"),
-        new $.fn.oembed.OEmbedProvider("github", "rich", ["github.com/[-.\\w@]+/[-.\\w@]+"], "https://api.github.com/repos/$1/$2?callback=?"
-            , {templateRegex: /.*\/([^\/]+)\/([^\/]+).*/,
+        new $.fn.oembed.OEmbedProvider("github", "rich", ["github.com/[-.\\w@]+/[-.\\w@]+"], "https://api.github.com/repos/$1/$2?callback=?",
+            {templateRegex: /.*\/([^\/]+)\/([^\/]+).*/,
                 templateData: function (data) {
                     if (!data.data.html_url)return false;
-                    return  '<div class="oembedall-githubrepos"><ul class="oembedall-repo-stats"><li>' + data.data.language + '</li><li class="oembedall-watchers"><a title="Watchers" href="' + data.data.html_url + '/watchers">&#x25c9; ' + data.data.watchers + '</a></li>'
-                        + '<li class="oembedall-forks"><a title="Forks" href="' + data.data.html_url + '/network">&#x0265; ' + data.data.forks + '</a></li></ul><h3><a href="' + data.data.html_url + '">' + data.data.name + '</a></h3><div class="oembedall-body"><p class="oembedall-description">' + data.data.description + '</p>'
-                        + '<p class="oembedall-updated-at">Last updated: ' + data.data.pushed_at + '</p></div></div>';
+                    return  '<div class="oembedall-githubrepos"><ul class="oembedall-repo-stats"><li>' + data.data.language + '</li><li class="oembedall-watchers"><a title="Watchers" href="' + data.data.html_url + '/watchers">&#x25c9; ' + data.data.watchers + '</a></li>' +
+                        '<li class="oembedall-forks"><a title="Forks" href="' + data.data.html_url + '/network">&#x0265; ' + data.data.forks + '</a></li></ul><h3><a href="' + data.data.html_url + '">' + data.data.name + '</a></h3><div class="oembedall-body"><p class="oembedall-description">' + data.data.description + '</p>' +
+                        '<p class="oembedall-updated-at">Last updated: ' + data.data.pushed_at + '</p></div></div>';
                 }
             }),
-        new $.fn.oembed.OEmbedProvider("facebook", "rich", ["facebook.com"], null
-            , {templateRegex: /.*\/([^\/]+)\/([^\/]+).*/,
+        new $.fn.oembed.OEmbedProvider("facebook", "rich", ["facebook.com"], null,
+            {templateRegex: /.*\/([^\/]+)\/([^\/]+).*/,
                 template: function (url) {
                     // adding script directly to DOM to make sure that it is loaded correctly.
                     if (!$.fn.oembed.facebokScriptHasBeenAdded) {
@@ -868,31 +872,33 @@
          }
          }),
          */
-        new $.fn.oembed.OEmbedProvider("stackoverflow", "rich", ["stackoverflow.com/questions/[\\d]+"], "http://api.stackoverflow.com/1.1/questions/$1?body=true&jsonp=?"
-            , {templateRegex: /.*questions\/([\d]+).*/,
+        new $.fn.oembed.OEmbedProvider("stackoverflow", "rich", ["stackoverflow.com/questions/[\\d]+"], "http://api.stackoverflow.com/1.1/questions/$1?body=true&jsonp=?",
+            {templateRegex: /.*questions\/([\d]+).*/,
                 templateData: function (data) {
                     if (!data.questions)
                         return false;
                     var q = data.questions[0];
                     var body = $(q.body).text();
-                    var out = '<div class="oembedall-stoqembed"><div class="oembedall-statscontainer"><div class="oembedall-statsarrow"></div><div class="oembedall-stats"><div class="oembedall-vote"><div class="oembedall-votes">'
-                        + '<span class="oembedall-vote-count-post"><strong>' + (q.up_vote_count - q.down_vote_count) + '</strong></span><div class="oembedall-viewcount">vote(s)</div></div>'
-                        + '</div><div class="oembedall-status"><strong>' + q.answer_count + '</strong>answer</div></div><div class="oembedall-views">' + q.view_count + ' view(s)</div></div>'
-                        + '<div class="oembedall-summary"><h3><a class="oembedall-question-hyperlink" href="http://stackoverflow.com/questions/' + q.question_id + '/">' + q.title + '</a></h3>'
-                        + '<div class="oembedall-excerpt">' + body.substring(0, 100) + '...</div><div class="oembedall-tags">';
-                    for (i in q.tags) {
-                        out += '<a title="" class="oembedall-post-tag" href="http://stackoverflow.com/questions/tagged/' + q.tags[i] + '">' + q.tags[i] + '</a>';
+                    var out = '<div class="oembedall-stoqembed"><div class="oembedall-statscontainer"><div class="oembedall-statsarrow"></div><div class="oembedall-stats"><div class="oembedall-vote"><div class="oembedall-votes">' +
+                        '<span class="oembedall-vote-count-post"><strong>' + (q.up_vote_count - q.down_vote_count) + '</strong></span><div class="oembedall-viewcount">vote(s)</div></div>' +
+                        '</div><div class="oembedall-status"><strong>' + q.answer_count + '</strong>answer</div></div><div class="oembedall-views">' + q.view_count + ' view(s)</div></div>' +
+                        '<div class="oembedall-summary"><h3><a class="oembedall-question-hyperlink" href="http://stackoverflow.com/questions/' + q.question_id + '/">' + q.title + '</a></h3>' +
+                        '<div class="oembedall-excerpt">' + body.substring(0, 100) + '...</div><div class="oembedall-tags">';
+                    for (var i in q.tags) {
+                        if (q.tags.hasOwnProperty(i)) {
+                            out += '<a title="" class="oembedall-post-tag" href="http://stackoverflow.com/questions/tagged/' + q.tags[i] + '">' + q.tags[i] + '</a>';
+                        }
                     }
 
-                    out += '</div><div class="oembedall-fr"><div class="oembedall-user-info"><div class="oembedall-user-gravatar32"><a href="http://stackoverflow.com/users/' + q.owner.user_id + '/' + q.owner.display_name + '">'
-                        + '<img width="32" height="32" alt="" src="http://www.gravatar.com/avatar/' + q.owner.email_hash + '?s=32&amp;d=identicon&amp;r=PG"></a></div><div class="oembedall-user-details">'
-                        + '<a href="http://stackoverflow.com/users/' + q.owner.user_id + '/' + q.owner.display_name + '">' + q.owner.display_name + '</a><br><span title="reputation score" class="oembedall-reputation-score">'
-                        + q.owner.reputation + '</span></div></div></div></div></div>';
+                    out += '</div><div class="oembedall-fr"><div class="oembedall-user-info"><div class="oembedall-user-gravatar32"><a href="http://stackoverflow.com/users/' + q.owner.user_id + '/' + q.owner.display_name + '">' +
+                        '<img width="32" height="32" alt="" src="http://www.gravatar.com/avatar/' + q.owner.email_hash + '?s=32&amp;d=identicon&amp;r=PG"></a></div><div class="oembedall-user-details">' +
+                        '<a href="http://stackoverflow.com/users/' + q.owner.user_id + '/' + q.owner.display_name + '">' + q.owner.display_name + '</a><br><span title="reputation score" class="oembedall-reputation-score">' +
+                        q.owner.reputation + '</span></div></div></div></div></div>';
                     return out;
                 }
             }),
         new $.fn.oembed.OEmbedProvider("wordpress", "rich", ["wordpress\\.com/.+", "blogs\\.cnn\\.com/.+", "techcrunch\\.com/.+", "wp\\.me/.+"], "http://public-api.wordpress.com/oembed/1.0/?for=jquery-oembed-all"),
-        new $.fn.oembed.OEmbedProvider("screenr", "rich", ["screenr\.com"], "http://www.screenr.com/embed/$1",
+        new $.fn.oembed.OEmbedProvider("screenr", "rich", ["screenr\\.com"], "http://www.screenr.com/embed/$1",
             {templateRegex: /.*\/([^\/]+).*/, embedtag: {tag: 'iframe', width: '650', height: 396}}) ,
         new $.fn.oembed.OEmbedProvider("gigpans", "rich", ["gigapan\\.org/[-.\\w@]+/\\d+"], "http://gigapan.org/gigapans/$1/options/nosnapshots/iframe/flash.html",
             {templateRegex: /.*\/(\d+)\/?.*/, embedtag: {tag: 'iframe', width: '100%', height: 400 }}),
@@ -909,7 +915,7 @@
                     width: '120px',
                     height: '240px'}
             }),
-        new $.fn.oembed.OEmbedProvider("slideshare", "rich", ["slideshare\.net"], "//www.slideshare.net/api/oembed/2", {format: 'jsonp'}),
+        new $.fn.oembed.OEmbedProvider("slideshare", "rich", ["slideshare\\.net"], "//www.slideshare.net/api/oembed/2", {format: 'jsonp'}),
         new $.fn.oembed.OEmbedProvider("roomsharejp", "rich", ["roomshare\\.jp/(en/)?post/.*"], "http://roomshare.jp/oembed.json"),
         new $.fn.oembed.OEmbedProvider("lanyard", "rich", ["lanyrd.com/\\d+/.+"], null,
             {
@@ -961,10 +967,10 @@
                     xpath: "//meta|//title|//link",
                     from: 'html',
                     datareturn: function (results) {
-                        if (!results['og:title'] && results['title'] && results['description'])
-                            results['og:title'] = results['title'];
+                        if (!results['og:title'] && results.title && results.description)
+                            results['og:title'] = results.title;
 
-                        if (!results['og:title'] && !results['title'])
+                        if (!results['og:title'] && !results.title)
                             return false;
 
                         var code = $('<p/>');
@@ -993,8 +999,8 @@
 
                         if (results['og:description'])
                             code.append(results['og:description'] + '<br/>');
-                        else if (results['description'])
-                            code.append(results['description'] + '<br/>');
+                        else if (results.description)
+                            code.append(results.description + '<br/>');
 
                         return code;
                     }
