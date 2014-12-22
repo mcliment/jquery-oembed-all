@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mcliment/jquery-oembed-all.svg?branch=master)](https://travis-ci.org/mcliment/jquery-oembed-all)
+
 Jquery-Oembed-All
 =================
 
