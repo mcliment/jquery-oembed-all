@@ -96,5 +96,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-scss-lint');
 
-	grunt.registerTask('default', ['jshint','qunit','concat','uglify','scsslint', 'sass']);
+	grunt.registerTask('default', ['jshint','qunit','scsslint','concat','uglify','sass']);
+
+	grunt.registerTask('travis', ['jshint','qunit','scsslint']);
 };
