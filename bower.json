@@ -21,6 +21,7 @@
     "examples"
   ],
   "dependencies": {
-    "jquery": "~1.11"
+    "jquery": "~1.11",
+    "qunit": "~1.16.0"
   }
 }
