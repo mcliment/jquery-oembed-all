@@ -1,14 +1,26 @@
 {
   "name": "jquery-oembed-all",
-  "version": "0.9",
+  "version": "0.9.0",
+  "homepage": "https://github.com/mcliment/jquery-oembed-all",
+  "authors": [
+    "Richard Chamorro <rchamorro@avanzis.com>",
+    "Marc Climent <mcliment@avanzis.com>"
+  ],
   "main": [
-    "jquery.oembed.js"
+    "jquery.oembed.js",
     "jquery.oembed.css"
   ],
+  "license": "MIT",
+  "private": true,
   "ignore": [
-    ".jshintrc",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "examples"
   ],
   "dependencies": {
-    "jQuery": "2.1.1"
+    "jquery": "~1.11"
   }
 }
