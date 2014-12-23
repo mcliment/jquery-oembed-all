@@ -22,6 +22,16 @@ module.exports = function(grunt) {
 			dist: {
 				src: ['src/scripts/jquery.oembed.js','src/scripts/md5.js'],
 				dest: 'dist/jquery.oembed.js'
+			},
+			providers: {
+				src: [
+					'src/scripts/providers/video.js',
+					'src/scripts/providers/audio.js',
+					'src/scripts/providers/photo.js',
+					'src/scripts/providers/rich.js',
+					'src/scripts/providers/opengraph.js'
+				],
+				dest: 'dist/jquery.oembed-providers.js',
 			}
 		},
 		uglify: {
@@ -31,6 +41,10 @@ module.exports = function(grunt) {
 			dist: {
 				src: '<%= concat.dist.dest %>',
 				dest: 'dist/jquery.oembed.min.js'
+			},
+			providers: {
+				src: '<%= concat.providers.dest %>',
+				dest: 'dist/jquery.ombed-providers.min.js'
 			}
     	},
     	qunit: {
@@ -48,7 +62,7 @@ module.exports = function(grunt) {
 					jshintrc: 'src/scripts/.jshintrc',
 					ignores: ['src/scripts/md5.js']
 				},
-				src: ['src/scripts/*.js']
+				src: ['src/scripts/*.js', 'src/scripts/providers/*.js']
 			},
 			test: {
         		options: {
@@ -56,7 +70,7 @@ module.exports = function(grunt) {
         		},
         		src: ['test/**/*.js']
       		}
-		},		
+		},
 		sass: {
 			debug: {
 				options: {
@@ -75,7 +89,7 @@ module.exports = function(grunt) {
 				files: {
 					'dist/jquery.oembed.min.css': 'src/styles/common.scss'
 				}
-			}	
+			}
 		},
 		scsslint: {
 			all: [
@@ -96,7 +110,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-scss-lint');
 
-	grunt.registerTask('default', ['jshint','qunit','scsslint','concat','uglify','sass']);
+	grunt.registerTask('default', ['jshint','scsslint','qunit','concat','uglify','sass']);
 
-	grunt.registerTask('travis', ['jshint','qunit','scsslint']);
+	grunt.registerTask('travis', ['jshint','scsslint','qunit']);
 };

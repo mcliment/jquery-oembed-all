@@ -17,7 +17,7 @@
       raises(block, [expected], [message])
   */
 
-  module('jQuery#oembed', {
+  module('jQuery.oembed', {
     // This will run before each test in this module.
     setup: function() {
       this.elems = $('#qunit-fixture').children();
@@ -30,12 +30,17 @@
     strictEqual(this.elems.oembed(), this.elems, 'should be chainable');
   });
 
-  //test('is awesome', function() {
-  //  expect(1);
-  //  strictEqual(this.elems.oembed().text(), 'awesome0awesome1awesome2', 'should be awesome');
-  //});
+  module('jQuery.oembed#youtube');
 
-  module('jQuery.oembed');
+  test('embeds video', function() {
+    expect(2);
+    var url = 'http://www.youtube.com/watch?v=bo36MrBfTk4';
+    var embed = $('<a href="' + url + '">Douglas Crockford: The Better Parts</a>').oembed();
+    var frame = embed.next().next();
+
+    strictEqual(frame.prop('tagName'), "IFRAME", "creates iframe");
+    ok(frame.attr('src').indexOf("youtube.com") > 0, "has url");
+  });
 
   //test('is awesome', function() {
   //  expect(2);
