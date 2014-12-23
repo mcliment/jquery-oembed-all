@@ -1,0 +1,16 @@
+.oembedall-closehide {
+  background-color: #aaa;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-right: 3px;
+}
+
+.oembedall-container {
+  margin-top: 5px;
+  text-align: left;
+}
+
+@import 'github';
+@import 'lanyard';
+@import 'livejournal';
+@import 'stackoverflow';

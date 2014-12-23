@@ -1,0 +1,169 @@
+.oembedall-stoqembed {
+  background: none repeat scroll 0 0 #fff;
+  border-bottom: 1px dotted #999;
+  color: #000;
+  float: left;
+  font-family: Arial,Liberation Sans,DejaVu Sans,sans-serif;
+  font-size: 80%;
+  line-height: 1;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+  width: 730px;
+
+  a {
+    color: #07c;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:visited {
+      color: #4a6b82;
+    }
+  }
+
+  h3 {
+    font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
+    font-size: 130%;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+  }
+
+  .oembedall-reputation-score {
+    color: #444;
+    font-size: 120%;
+    font-weight: bold;
+    margin-right: 2px;
+  }
+
+
+  .oembedall-user-info {
+    height: 35px;
+    width: 185px;
+
+    .oembedall-user-gravatar32 {
+      float: left;
+      height: 32px;
+      width: 32px;
+    }
+
+    .oembedall-user-details {
+      float: left;
+      margin-left: 5px;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 145px;
+    }
+  }
+
+  .oembedall-question-hyperlink {
+    font-weight: bold;
+  }
+
+  .oembedall-stats {
+    background: none repeat scroll 0 0 #eee;
+    margin: 0 0 0 7px;
+    padding: 4px 7px 6px;
+    width: 58px;
+  }
+
+  .oembedall-statscontainer {
+    float: left;
+    margin-right: 8px;
+    width: 86px;
+  }
+
+  .oembedall-votes {
+    color: #555;
+    padding: 0 0 7px;
+    text-align: center;
+  }
+
+  .oembedall-vote-count-post {
+    color: #808185;
+    display: block;
+    font-size: 240%;
+    font-weight: bold;
+  }
+
+  .oembedall-views {
+    color: #999;
+    padding-top: 4px;
+    text-align: center;
+  }
+
+  .oembedall-status {
+    background: none repeat scroll 0 0 #75845c;
+    color: #fff;
+    margin-top: -3px;
+    padding: 4px 0;
+    text-align: center;
+    
+    strong {
+      color: #fff;
+      display: block;
+      font-size: 140%;
+    }
+  }
+
+  .oembedall-summary {
+    float: left;
+    width: 635px;
+  }
+
+  .oembedall-excerpt {
+    line-height: 1.2;
+    margin: 0;
+    padding: 0 0 5px;
+  }
+
+  .oembedall-tags {
+    float: left;
+    line-height: 18px;
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
+  .oembedall-post-tag {
+    background-color: #e0eaf1;
+    border-bottom: 1px solid #3e6d8e;
+    border-right: 1px solid #7f9fb6;
+    color: #3e6d8e;
+    font-size: 90%;
+    line-height: 2.4;
+    margin: 2px 2px 2px 0;
+    padding: 3px 4px;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: #3e6d8e;
+      border-bottom: 1px solid #37607d;
+      border-right: 1px solid #37607d;
+      color: #e0eaf1;
+    }
+  }
+
+  .oembedall-fr {
+    float: right;
+  }
+
+  .oembedall-statsarrow {
+    background-image: url('//cdn.sstatic.net/stackoverflow/img/sprites.png?v=3');
+    background-position: 0 -435px;
+    background-repeat: no-repeat;
+    float: right;
+    height: 13px;
+    margin-top: 12px;
+    overflow: hidden;
+    width: 7px;
+  }
+}

@@ -1,3 +1,13 @@
+.oembedall-closehide {
+  background-color: #aaa;
+  border-radius: 2px;
+  cursor: pointer;
+  margin-right: 3px; }
+
+.oembedall-container {
+  margin-top: 5px;
+  text-align: left; }
+
 .oembedall-githubrepos {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -70,15 +80,84 @@
       border-bottom-right-radius: 3px;
       border-top-right-radius: 3px; }
 
-.oembedall-closehide {
-  background-color: #aaa;
-  border-radius: 2px;
-  cursor: pointer;
-  margin-right: 3px; }
-
-.oembedall-container {
-  margin-top: 5px;
-  text-align: left; }
+.oembedall-lanyard {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition-delay: 0s;
+  -webkit-transition-duration: .4s;
+  -webkit-transition-property: width;
+  -webkit-transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image: none;
+  background-origin: padding-box;
+  border-bottom-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-top-width: 0;
+  color: #112644;
+  display: block;
+  float: left;
+  font-family: 'Trebuchet MS', Trebuchet, sans-serif;
+  font-size: 16px;
+  height: 253px;
+  line-height: 19px;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  max-width: none;
+  min-height: 0;
+  outline-color: #112644;
+  outline-style: none;
+  outline-width: 0;
+  overflow-x: visible;
+  overflow-y: visible;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  position: relative;
+  text-align: left;
+  vertical-align: baseline;
+  width: 804px; }
+  .oembedall-lanyard .tagline {
+    font-size: 1.5em; }
+  .oembedall-lanyard .wrapper {
+    clear: both;
+    overflow: hidden; }
+  .oembedall-lanyard .split {
+    display: inline;
+    float: left; }
+  .oembedall-lanyard .prominent-place .flag:link,
+  .oembedall-lanyard .prominent-place .flag:visited,
+  .oembedall-lanyard .prominent-place .flag:hover,
+  .oembedall-lanyard .prominent-place .flag:focus,
+  .oembedall-lanyard .prominent-place .flag:active {
+    display: block;
+    float: left;
+    height: 48px;
+    margin-right: 10px;
+    position: relative;
+    top: -5px;
+    width: 48px; }
+  .oembedall-lanyard .place-context {
+    font-size: .889em; }
+  .oembedall-lanyard .prominent-place {
+    font-size: 1.125em;
+    font-weight: normal;
+    line-height: 1.1em; }
+    .oembedall-lanyard .prominent-place .sub-place {
+      display: block; }
+  .oembedall-lanyard .main-date {
+    color: #8cb4e0;
+    font-weight: bold;
+    line-height: 1.1; }
+  .oembedall-lanyard .first {
+    margin: 0 0 0 2.857%;
+    margin-left: 0;
+    width: 48.57%; }
 
 .oembedall-ljuser {
   font-weight: bold; }
@@ -206,96 +285,5 @@
     margin-top: 12px;
     overflow: hidden;
     width: 7px; }
-
-.oembedall-facebook1 {
-  border: #1a3c6c solid 1px;
-  font: 13.34px/1.4 verdana;
-  padding: 0;
-  width: 500px; }
-
-.oembedall-facebook2 {
-  background-color: #627add; }
-  .oembedall-facebook2 a {
-    color: #e8e8e8;
-    text-decoration: none; }
-
-.oembedall-lanyard {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  -webkit-transition-delay: 0s;
-  -webkit-transition-duration: .4s;
-  -webkit-transition-property: width;
-  -webkit-transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
-  background-attachment: scroll;
-  background-clip: border-box;
-  background-color: transparent;
-  background-image: none;
-  background-origin: padding-box;
-  border-bottom-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-top-width: 0;
-  color: #112644;
-  display: block;
-  float: left;
-  font-family: 'Trebuchet MS', Trebuchet, sans-serif;
-  font-size: 16px;
-  height: 253px;
-  line-height: 19px;
-  margin-bottom: 0;
-  margin-left: 0;
-  margin-right: 0;
-  margin-top: 0;
-  max-width: none;
-  min-height: 0;
-  outline-color: #112644;
-  outline-style: none;
-  outline-width: 0;
-  overflow-x: visible;
-  overflow-y: visible;
-  padding-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
-  position: relative;
-  text-align: left;
-  vertical-align: baseline;
-  width: 804px; }
-  .oembedall-lanyard .tagline {
-    font-size: 1.5em; }
-  .oembedall-lanyard .wrapper {
-    clear: both;
-    overflow: hidden; }
-  .oembedall-lanyard .split {
-    display: inline;
-    float: left; }
-  .oembedall-lanyard .prominent-place .flag:link,
-  .oembedall-lanyard .prominent-place .flag:visited,
-  .oembedall-lanyard .prominent-place .flag:hover,
-  .oembedall-lanyard .prominent-place .flag:focus,
-  .oembedall-lanyard .prominent-place .flag:active {
-    display: block;
-    float: left;
-    height: 48px;
-    margin-right: 10px;
-    position: relative;
-    top: -5px;
-    width: 48px; }
-  .oembedall-lanyard .place-context {
-    font-size: .889em; }
-  .oembedall-lanyard .prominent-place {
-    font-size: 1.125em;
-    font-weight: normal;
-    line-height: 1.1em; }
-    .oembedall-lanyard .prominent-place .sub-place {
-      display: block; }
-  .oembedall-lanyard .main-date {
-    color: #8cb4e0;
-    font-weight: bold;
-    line-height: 1.1; }
-  .oembedall-lanyard .first {
-    margin: 0 0 0 2.857%;
-    margin-left: 0;
-    width: 48.57%; }
 
 /*# sourceMappingURL=jquery.oembed.css.map */

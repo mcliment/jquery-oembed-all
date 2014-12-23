@@ -1,0 +1,95 @@
+@import 'mixins';
+
+.oembedall-lanyard {
+  @include box-shadow(none);
+  @include transition;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image: none;
+  background-origin: padding-box;
+  border-bottom-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-top-width: 0;
+  color: #112644;
+  display: block;
+  float: left;
+  font-family: 'Trebuchet MS', Trebuchet, sans-serif;
+  font-size: 16px;
+  height: 253px;
+  line-height: 19px;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  max-width: none;
+  min-height: 0;
+  outline-color: #112644;
+  outline-style: none;
+  outline-width: 0;
+  overflow-x: visible;
+  overflow-y: visible;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  position: relative;
+  text-align: left;
+  vertical-align: baseline;
+  width: 804px;
+
+  .tagline {
+    font-size: 1.5em;
+  }
+
+  .wrapper {
+    clear: both;
+    overflow: hidden;
+  }
+
+  .split {
+    display: inline;
+    float: left;
+  }
+
+  .prominent-place .flag:link, 
+  .prominent-place .flag:visited,
+  .prominent-place .flag:hover,
+  .prominent-place .flag:focus,
+  .prominent-place .flag:active {
+    display: block;
+    float: left;
+    height: 48px;
+    margin-right: 10px;
+    position: relative;
+    top: -5px;
+    width: 48px;
+  }
+
+  .place-context {
+    font-size: .889em;
+  }
+
+  .prominent-place {
+    font-size: 1.125em;
+    font-weight: normal;
+    line-height: 1.1em;
+    
+    .sub-place {
+      display: block;
+    }
+  }
+
+  .main-date {
+    color: #8cb4e0;
+    font-weight: bold;
+    line-height: 1.1;
+  }
+
+  .first {
+    margin: 0 0 0 2.857%;
+    margin-left: 0;
+    width: 48.57%;
+  }
+}

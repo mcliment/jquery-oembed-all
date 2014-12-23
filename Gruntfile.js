@@ -64,7 +64,7 @@ module.exports = function(grunt) {
 					sourcemap: 'auto'
 				},
 				files: {
-					'dist/jquery.oembed.css': 'src/styles/jquery.oembed.scss'
+					'dist/jquery.oembed.css': 'src/styles/common.scss'
 				}
 			},
 			dist: {
@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 					sourcemap: 'none'
 				},
 				files: {
-					'dist/jquery.oembed.min.css': 'src/styles/jquery.oembed.scss'
+					'dist/jquery.oembed.min.css': 'src/styles/common.scss'
 				}
 			}	
 		},
