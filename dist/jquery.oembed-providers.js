@@ -1,11 +1,10 @@
-/*! jquery-oembed-plugin - v0.9.0 - 2014-12-23
+/*! jquery-oembed-plugin - v0.9.0 - 2014-12-24
  *
  * Copyright (c) 2014 Richard Chamorro <rchamorro@avanzis.com>, Marc Climent <mcliment@avanzis.com>
  * Licensed under the MIT license
  *
  * Forked by Andrew Mee to Provide a slightly different kind of embedding experience
  */
-// Video
 $.fn.oembed.addProvider(
     'youtube',
     'video',
@@ -20,6 +19,31 @@ $.fn.oembed.addProvider(
         }
     }
 );
+
+// $.fn.oembed.addProvider(
+//     'youtube',
+//     'video',
+//     ['youtube\\.com/watch.+v=[\\w-]+&?', 'youtu\\.be/[\\w-]+'],
+//     'http://www.youtube.com/oembed',
+//     {
+//         useYQL: "json"
+//     }
+// );
+
+// $.fn.oembed.addProvider(
+//     'youtubeiframe',
+//     'video',
+//     ['youtube.com/embed'],
+//     "$1?wmode=transparent",
+//     {
+//         templateRegex: /(.*)/,
+//         embedtag: {
+//             tag: "iframe",
+//             width: "425",
+//             height: "349"
+//         }
+//     }
+// );
 
 $.fn.oembed.addProvider(
     'wistia',

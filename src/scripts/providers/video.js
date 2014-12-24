@@ -1,4 +1,3 @@
-// Video
 $.fn.oembed.addProvider(
     'youtube',
     'video',
@@ -13,6 +12,31 @@ $.fn.oembed.addProvider(
         }
     }
 );
+
+// $.fn.oembed.addProvider(
+//     'youtube',
+//     'video',
+//     ['youtube\\.com/watch.+v=[\\w-]+&?', 'youtu\\.be/[\\w-]+'],
+//     'http://www.youtube.com/oembed',
+//     {
+//         useYQL: "json"
+//     }
+// );
+
+// $.fn.oembed.addProvider(
+//     'youtubeiframe',
+//     'video',
+//     ['youtube.com/embed'],
+//     "$1?wmode=transparent",
+//     {
+//         templateRegex: /(.*)/,
+//         embedtag: {
+//             tag: "iframe",
+//             width: "425",
+//             height: "349"
+//         }
+//     }
+// );
 
 $.fn.oembed.addProvider(
     'wistia',
