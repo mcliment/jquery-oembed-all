@@ -1,4 +1,4 @@
-/*! jquery-oembed-plugin - v0.9.0 - 2014-12-23
+/*! jquery-oembed-plugin - v0.9.0 - 2014-12-24
  *
  * Copyright (c) 2014 Richard Chamorro <rchamorro@avanzis.com>, Marc Climent <mcliment@avanzis.com>
  * Licensed under the MIT license
@@ -55,7 +55,7 @@
                 };
             }
 
-            if (resourceURL !== null && resourceURL !== undefined) {
+            if (resourceURL && typeof(resourceURL) !== 'undefined') {
                 //Check if shorten URL
                 if (settings.expandUrls) {
                     for (var j = 0, l = shortURLList.length; j < l; j++) {
@@ -85,7 +85,7 @@
                     settings.onProviderNotFound.call(container, resourceURL);
                 }
             }
-            
+
             return container;
         });
     };
@@ -201,7 +201,7 @@
     function embedCode(container, externalUrl, embedProvider) {
         var ajaxopts;
 
-        if ($('#jqoembeddata').data(externalUrl) !== undefined && embedProvider.embedtag.tag !== 'iframe') {
+        if (typeof $('#jqoembeddata').data(externalUrl) !== 'undefined' && embedProvider.embedtag.tag !== 'iframe') {
             var oembedData = {code: $('#jqoembeddata').data(externalUrl)};
             success(oembedData, externalUrl, container);
         } else if (embedProvider.yql) {
@@ -221,7 +221,6 @@
                 data: {
                     q: query,
                     format: 'json',
-                    env: 'store://datatables.org/alltableswithkeys',
                     callback: '?'
                 },
                 success: function (data) {
@@ -268,7 +267,11 @@
                     if (result === false) {
                         return;
                     }
-                    var oembedData = $.extend({}, result);
+                    var oembedData = {};
+                    if (typeof result === 'object')
+                    {
+                        oembedData = $.extend(oembedData, result);
+                    }
                     oembedData.code = result;
                     success(oembedData, externalUrl, container);
                 },
@@ -402,11 +405,12 @@
                     });
                 }
                 oembedContainer.append('<br/>');
-                try {
+                if (typeof oembedData.code.clone === 'function') {
                     oembedData.code.clone().appendTo(oembedContainer);
-                } catch (e) {
+                } else {
                     oembedContainer.append(oembedData.code);
                 }
+
                 /* Make videos semi-responsive
                  * If parent div width less than embeded iframe video then iframe gets shrunk to fit smaller width
                  * If parent div width greater thans embed iframe use the max widht
